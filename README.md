@@ -6,11 +6,7 @@
 <meta name="theme-color" content="#f5f0e8">
 <title>FLOW ♡</title>
 <style>
-:root{
- --bg:#f7f3ed;--paper:#fffdf9;--ink:#403b38;--muted:#8c827a;
- --accent:#b8a5c9;--soft:#eee6f4;--line:#e9e1d8;
- --good:#849d85;--danger:#d93649;
-}
+:root{--bg:#f7f3ed;--paper:#fffdf9;--ink:#403b38;--muted:#8c827a;--accent:#b8a5c9;--soft:#eee6f4;--line:#e9e1d8;--good:#849d85;--danger:#d93649}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;font-size:15px;line-height:1.65}
 button,input,textarea,select{font:inherit}
@@ -90,8 +86,6 @@ hr{border:0;border-top:1px solid var(--line);margin:15px 0}
 .countdown-elapsed{width:100%;text-align:right;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
 .countdown-controls{display:flex;gap:8px;width:100%}
 .countdown-controls button{flex:1;min-height:48px}
-
-/* 勉強記録 */
 .study-ring{--study-progress:0deg;width:min(72vw,290px);aspect-ratio:1;border-radius:50%;padding:10px;margin:15px auto;background:conic-gradient(var(--accent) var(--study-progress),var(--line) 0);display:grid;place-items:center}
 .study-ring-inner{width:100%;height:100%;border-radius:50%;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center}
 .study-clock{font-size:clamp(48px,13vw,68px);font-weight:350;letter-spacing:-.05em;font-variant-numeric:tabular-nums;line-height:1.2}
@@ -170,10 +164,7 @@ hr{border:0;border-top:1px solid var(--line);margin:15px 0}
  <div class="card"><h2>お出かけ準備</h2><p class="small">出発時間に合わせて、今できる準備を整理します。</p><label for="leaveTime">出発時刻</label><input type="time" id="leaveTime" value="08:00"><label for="prepRoutineSelect">登録済みルーティン</label><select id="prepRoutineSelect"><option value="">ルーティンを選んでください</option></select><button class="btn" onclick="appendSelectedRoutineToPrep()">＋ ルーティンを追加</button><hr><h3>今回の準備項目</h3><p class="small">今回だけ省略したい項目は、チェックを外せます。</p><div id="prepItems"></div><div class="row wrap"><button class="btn" onclick="addPrepItem()">＋ 項目を追加</button><button class="btn primary" onclick="planPrep()">準備プランを作る</button></div><div class="stat" style="margin-top:14px"><div class="small">出発まで</div><div class="big" id="prepRemaining">--分</div></div></div>
  <div class="card hidden" id="prepResult"><h2>今回の準備プラン</h2><div class="stat" id="prepMessage"></div><div id="prepPlan"></div><hr><div class="between"><span class="small">選択した準備の合計</span><strong id="prepTotal">0分</strong></div><div class="small" id="prepDifference"></div><button class="btn primary" style="margin-top:12px" onclick="acceptPrepPlan()">この提案で準備を開始</button></div>
  <div class="card"><h2>5分だけ集中</h2><p class="small">まずは5分だけ始めてみましょう。</p><div class="timer" id="focusClock">05:00</div><button class="btn primary" onclick="startFocus()">スタート</button><button class="btn" onclick="stopFocus()">停止・リセット</button></div>
-</section>
-
-<!-- 勉強ページ -->
-<section class="page" id="page-study">
+</section><section class="page" id="page-study">
  <div class="card">
   <div class="between"><h2>勉強タイマー</h2><span class="pill" id="studyTimerStatus">待機中</span></div>
   <div class="study-ring" id="studyRing"><div class="study-ring-inner"><div class="small">STUDY TIME</div><div class="study-clock" id="studyClock">00:00:00</div><div class="small" id="studyClockHint">今日の積み重ね</div></div></div>
@@ -184,6 +175,28 @@ hr{border:0;border-top:1px solid var(--line);margin:15px 0}
   <button class="btn danger" style="width:100%;margin-top:8px" id="studyFinishBtn" onclick="finishStudyTimer()" disabled>終了して記録</button>
   <p class="small">カウントアップ式。停止中の時間は記録されません。</p>
  </div>
+
+ <!-- 手動記録追加 -->
+ <div class="card">
+  <h2>手動で勉強記録を追加</h2>
+  <p class="small">タイマーを使わなかった日も、あとから記録できます。</p>
+  <label for="manualStudyDate">勉強した日</label>
+  <input type="date" id="manualStudyDate">
+  <label for="manualStudySubject">科目</label>
+  <select id="manualStudySubject"><option>英語</option><option>数学IA</option><option>数学IIBC</option><option>国語</option><option>日本史</option><option>政治経済</option><option>理科</option><option>その他</option></select>
+  <div class="grid2">
+   <div><label for="manualStudyHours">時間</label><input type="number" id="manualStudyHours" min="0" max="24" value="0" inputmode="numeric"></div>
+   <div><label for="manualStudyMinutes">分</label><input type="number" id="manualStudyMinutes" min="0" max="59" value="30" inputmode="numeric"></div>
+  </div>
+  <label for="manualStudyMaterial">教材（任意）</label>
+  <select id="manualStudyMaterial"><option value="">選択なし</option></select>
+  <div class="grid2">
+   <div><label for="manualStudyGoal">関連する目標（任意）</label><select id="manualStudyGoal"><option value="">選択なし</option></select></div>
+   <div><label for="manualStudyTask">関連タスク（任意）</label><select id="manualStudyTask"><option value="">選択なし</option></select></div>
+  </div>
+  <button class="btn primary" style="width:100%" onclick="addManualStudyRecord()">＋ 勉強記録を追加</button>
+ </div>
+
  <div class="grid2">
   <div class="stat"><div class="small">今週の勉強時間</div><div class="big" id="studyWeekTotal">0分</div></div>
   <div class="stat"><div class="small">今月の勉強時間</div><div class="big" id="studyMonthTotal">0分</div></div>
@@ -218,13 +231,13 @@ hr{border:0;border-top:1px solid var(--line);margin:15px 0}
   <details><summary>2. タスク・目標</summary><p>タスク、目標、関連づけを登録できます。タスクのチェックは日付ごとに保存されます。</p></details>
   <details><summary>3. ルーティン</summary><p>最大3つまで登録できます。各ステップの時間は自分で入力します。</p></details>
   <details><summary>4. お出かけ準備</summary><p>出発時刻に合わせて準備項目を整理できます。元のルーティンは変更されません。</p></details>
-  <details><summary>5. 勉強記録</summary><p>勉強タイマーはカウントアップ式です。教材・科目・目標・タスクを関連づけられます。月間カレンダーや科目別の時間も確認できます。</p></details>
+  <details><summary>5. 勉強記録</summary><p>タイマーでも手動でも勉強時間を記録できます。教材・科目・目標・タスクを関連づけられます。月間カレンダーや科目別の時間も確認できます。</p></details>
   <details><summary>6. 教材とISBN</summary><p>教材名と科目を登録できます。バーコード読み取りはiPhoneのブラウザ環境によって利用できない場合があります。その場合はISBNを手入力してください。ISBNから書名を自動取得する機能はありません。</p></details>
   <details><summary>7. バックアップ</summary><p>設定からJSON形式で保存できます。復元すると現在のデータが選択したバックアップの内容に置き換わります。</p></details>
  </div><div class="guide-note"><strong>大切なお知らせ</strong><p>予定どおりに進まない日があっても大丈夫。必要に応じて調整し、自分のペースで使ってください。</p></div></div>
 </section>
-</div>
 
+</div>
 <nav class="nav">
  <button class="active" data-page="home" onclick="showPage('home')"><span>⌂</span>ホーム</button>
  <button data-page="tasks" onclick="showPage('tasks')"><span>☑</span>タスク</button>
@@ -236,9 +249,9 @@ hr{border:0;border-top:1px solid var(--line);margin:15px 0}
  <button data-page="settings" onclick="showPage('settings')"><span>⚙</span>設定</button>
 </nav>
 <div class="toast" id="toast"></div>
+
 <script>
 "use strict";
-
 const STORE="FLOW_APP_V2";
 const LEGACY="FLOW_COMPLETE_V1";
 const $=id=>document.getElementById(id);
@@ -276,135 +289,68 @@ function normalize(x){
   steps:(Array.isArray(r.steps)?r.steps:[]).map(s=>{
    const old=typeof s==="string"?{name:s}:s;
    const mins=Number(old.mins??old.min);
-   return {id:old.id||uid(),name:old.name||"ステップ",
-    mins:Number.isFinite(mins)&&mins>0?mins:null,
-    priority:["must","prefer","optional"].includes(old.priority)?old.priority:"prefer"};
+   return {id:old.id||uid(),name:old.name||"ステップ",mins:Number.isFinite(mins)&&mins>0?mins:null,priority:["must","prefer","optional"].includes(old.priority)?old.priority:"prefer"};
   })
  }));
  const goals=Array.isArray(x.goals)?x.goals:f.goals;
- return {...f,...x,version:4,tasks,
-  goals:goals.map(g=>({...g,id:g.id||uid()})),routines,dailyTasks,
+ return {...f,...x,version:4,tasks,goals:goals.map(g=>({...g,id:g.id||uid()})),routines,dailyTasks,
   records:x.records&&typeof x.records==="object"?x.records:{},
   reflection:x.reflection&&typeof x.reflection==="object"?x.reflection:{},
   studySessions:Array.isArray(x.studySessions)?x.studySessions:[],
-  materials:Array.isArray(x.materials)?x.materials:[],
-  theme:x.theme||"beige"};
+  materials:Array.isArray(x.materials)?x.materials:[],theme:x.theme||"beige"};
 }
 function loadDB(){
- try{
-  let raw=localStorage.getItem(STORE);
-  if(!raw)raw=localStorage.getItem(LEGACY);
-  if(raw)return normalize(JSON.parse(raw));
- }catch(e){console.warn("FLOW data could not be read",e)}
+ try{let raw=localStorage.getItem(STORE);if(!raw)raw=localStorage.getItem(LEGACY);if(raw)return normalize(JSON.parse(raw))}
+ catch(e){console.warn("FLOW data could not be read",e)}
  return fresh();
 }
 let db=loadDB();
-function save(){
- try{localStorage.setItem(STORE,JSON.stringify(db))}
- catch(e){toast("保存できませんでした。バックアップを確認してください。")}
-}
-function toast(msg){
- const el=$("toast");el.textContent=msg;el.style.display="block";
- clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.style.display="none",2400);
-}
+function save(){try{localStorage.setItem(STORE,JSON.stringify(db))}catch(e){toast("保存できませんでした。バックアップを確認してください。")}}
+function toast(msg){const el=$("toast");el.textContent=msg;el.style.display="block";clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.style.display="none",2400)}
 function taskDone(id,k=dateKey()){return !!db.dailyTasks?.[k]?.[String(id)]}
-function setTaskDone(id,value,k=dateKey()){
- if(!db.dailyTasks)db.dailyTasks={};
- if(!db.dailyTasks[k])db.dailyTasks[k]={};
- db.dailyTasks[k][String(id)]=!!value;save();
-}
+function setTaskDone(id,value,k=dateKey()){if(!db.dailyTasks)db.dailyTasks={};if(!db.dailyTasks[k])db.dailyTasks[k]={};db.dailyTasks[k][String(id)]=!!value;save()}
 function todayTasks(){return db.tasks.map(t=>({...t,done:taskDone(t.id)}))}
 function todaySeconds(){return (db.records[dateKey()]||[]).reduce((a,r)=>a+Number(r.sec||0),0)}
-function fmtTime(sec){
- sec=Math.max(0,Math.floor(sec));
- return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");
-}
-function fmtStudyTime(sec){
- sec=Math.max(0,Math.floor(sec));
- const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;
- return [h,m,s].map(n=>String(n).padStart(2,"0")).join(":");
-}
-function minutesText(sec){
- const n=Math.round(sec/60);
- return n<60?n+"分":Math.floor(n/60)+"時間"+(n%60?n%60+"分":"");
-}
+function fmtTime(sec){sec=Math.max(0,Math.floor(sec));return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")}
+function fmtStudyTime(sec){sec=Math.max(0,Math.floor(sec));const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return [h,m,s].map(n=>String(n).padStart(2,"0")).join(":")}
+function minutesText(sec){const n=Math.round(sec/60);return n<60?n+"分":Math.floor(n/60)+"時間"+(n%60?n%60+"分":"")}
 function showPage(name){
  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+name));
  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
- if(name==="review")loadTodayReflection();
- if(name==="study")renderStudy();
- render();window.scrollTo({top:0,behavior:"smooth"});
+ if(name==="review")loadTodayReflection();if(name==="study")renderStudy();render();window.scrollTo({top:0,behavior:"smooth"});
 }
 function applyTheme(){
- const themes={
-  beige:["#f7f3ed","#fffdf9","#403b38","#8c827a","#b8a5c9","#eee6f4","#e9e1d8"],
-  lavender:["#f5f1fa","#fffefe","#393440","#898092","#b8a2d5","#eee5f8","#e8dfef"],
-  mono:["#f1f1f1","#ffffff","#292929","#777777","#777777","#e7e7e7","#dddddd"]
- };
- const t=themes[db.theme]||themes.beige;
- ["--bg","--paper","--ink","--muted","--accent","--soft","--line"].forEach((k,i)=>document.documentElement.style.setProperty(k,t[i]));
+ const themes={beige:["#f7f3ed","#fffdf9","#403b38","#8c827a","#b8a5c9","#eee6f4","#e9e1d8"],lavender:["#f5f1fa","#fffefe","#393440","#898092","#b8a2d5","#eee5f8","#e8dfef"],mono:["#f1f1f1","#ffffff","#292929","#777777","#777777","#e7e7e7","#dddddd"]};
+ const t=themes[db.theme]||themes.beige;["--bg","--paper","--ink","--muted","--accent","--soft","--line"].forEach((k,i)=>document.documentElement.style.setProperty(k,t[i]));
  if($("themeChoice"))$("themeChoice").value=db.theme;
 }
 function render(){
- applyTheme();
- $("todayLabel").textContent=new Date().toLocaleDateString("ja-JP",{year:"numeric",month:"long",day:"numeric",weekday:"long"});
+ applyTheme();$("todayLabel").textContent=new Date().toLocaleDateString("ja-JP",{year:"numeric",month:"long",day:"numeric",weekday:"long"});
  renderHome();renderTasks();renderGoals();renderRoutines();renderPrepRoutineOptions();renderReview();
  if($("page-study").classList.contains("active"))renderStudy();
 }
 function renderHome(){
  const ts=todayTasks(),done=ts.filter(t=>t.done).length,total=ts.length,pct=total?Math.round(done/total*100):0;
- $("homePercent").textContent=pct+"%";$("homeCount").textContent=done+" / "+total;
- $("homeProgress").style.width=pct+"%";$("remaining").textContent=total-done;
- $("todayTime").textContent=minutesText(todaySeconds());
- $("homeMessage").textContent=total&&done===total?"今日もよく頑張りました！ ♡":done?"いい感じ！少しずつ進んでいます。":"小さな一歩から始めましょう。";
+ $("homePercent").textContent=pct+"%";$("homeCount").textContent=done+" / "+total;$("homeProgress").style.width=pct+"%";$("remaining").textContent=total-done;
+ $("todayTime").textContent=minutesText(todaySeconds());$("homeMessage").textContent=total&&done===total?"今日もよく頑張りました！ ♡":done?"いい感じ！少しずつ進んでいます。":"小さな一歩から始めましょう。";
  $("homeTasks").innerHTML=ts.length?ts.slice(0,5).map(taskHTML).join(""):'<div class="empty">タスクを追加してみましょう ♡</div>';
  $("homeGoals").innerHTML=db.goals.length?db.goals.filter(g=>!g.done).slice(0,3).map(g=>`<div class="step">☆ ${esc(g.name)}</div>`).join(""):'<div class="empty">目標を追加してみましょう</div>';
 }
-function taskHTML(t){
- return `<div class="task ${t.done?"done":""}">
-  <input type="checkbox" ${t.done?"checked":""} onchange="toggleTask('${esc(t.id)}',this.checked)">
-  <div class="grow"><div class="task-name">${esc(t.name)}</div><div class="small">${esc(t.cat)} ・ ${Number(t.mins)||0}分</div></div>
-  <button class="btn small" onclick="startTaskTimer('${esc(t.id)}')">計測</button>
-  <button class="btn small danger" onclick="deleteTask('${esc(t.id)}')">削除</button>
- </div>`;
-}
+function taskHTML(t){return `<div class="task ${t.done?"done":""}"><input type="checkbox" ${t.done?"checked":""} onchange="toggleTask('${esc(t.id)}',this.checked)"><div class="grow"><div class="task-name">${esc(t.name)}</div><div class="small">${esc(t.cat)} ・ ${Number(t.mins)||0}分</div></div><button class="btn small" onclick="startTaskTimer('${esc(t.id)}')">計測</button><button class="btn small danger" onclick="deleteTask('${esc(t.id)}')">削除</button></div>`}
 function renderTasks(){
- const ts=todayTasks().sort((a,b)=>a.order-b.order);
- $("taskCounter").textContent=ts.filter(t=>t.done).length+"/"+ts.length+"件";
+ const ts=todayTasks().sort((a,b)=>a.order-b.order);$("taskCounter").textContent=ts.filter(t=>t.done).length+"/"+ts.length+"件";
  $("taskList").innerHTML=ts.length?ts.map(taskHTML).join(""):'<div class="empty">まだタスクがありません。下から追加してください。</div>';
  $("taskGoal").innerHTML='<option value="">目標と関連づけない</option>'+db.goals.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join("");
 }
 function toggleTask(id,checked){setTaskDone(id,checked);render();toast(checked?"タスク完了！おつかれさま ♡":"チェックを戻しました")}
-function addTask(){
- const name=$("taskName").value.trim();if(!name)return toast("タスク名を入力してください");
- db.tasks.push({id:uid(),name,cat:$("taskCat").value,mins:Math.max(1,Number($("taskMins").value)||15),goalId:$("taskGoal").value,order:db.tasks.length});
- $("taskName").value="";save();render();toast("タスクを追加しました");
-}
-function deleteTask(id){
- if(!confirm("このタスクを削除しますか？"))return;
- db.tasks=db.tasks.filter(t=>String(t.id)!==String(id));save();render();
-}
-function addGoal(){
- const name=$("goalName").value.trim();if(!name)return toast("目標を入力してください");
- db.goals.push({id:uid(),name,why:$("goalWhy").value.trim(),done:false});
- $("goalName").value="";$("goalWhy").value="";save();render();toast("目標を追加しました");
-}
+function addTask(){const name=$("taskName").value.trim();if(!name)return toast("タスク名を入力してください");db.tasks.push({id:uid(),name,cat:$("taskCat").value,mins:Math.max(1,Number($("taskMins").value)||15),goalId:$("taskGoal").value,order:db.tasks.length});$("taskName").value="";save();render();toast("タスクを追加しました")}
+function deleteTask(id){if(!confirm("このタスクを削除しますか？"))return;db.tasks=db.tasks.filter(t=>String(t.id)!==String(id));save();render()}
+function addGoal(){const name=$("goalName").value.trim();if(!name)return toast("目標を入力してください");db.goals.push({id:uid(),name,why:$("goalWhy").value.trim(),done:false});$("goalName").value="";$("goalWhy").value="";save();render();toast("目標を追加しました")}
 function renderGoals(){
- $("goalList").innerHTML=db.goals.length?db.goals.map(g=>{
-  const related=db.tasks.filter(t=>String(t.goalId)===String(g.id));
-  return `<div class="step"><div class="between"><strong>${esc(g.name)}</strong><button class="btn small" onclick="toggleGoal('${esc(g.id)}')">${g.done?"達成済み ✓":"達成にする"}</button></div>
-   ${g.why?`<div class="small">${esc(g.why)}</div>`:""}<div class="small">関連タスク：${related.length}件</div>
-   ${related.map(t=>`<div class="small">・${esc(t.name)}${taskDone(t.id)?" ✓":""}</div>`).join("")}
-   <button class="btn small danger" style="margin-top:7px" onclick="deleteGoal('${esc(g.id)}')">削除</button></div>`;
- }).join(""):'<div class="empty">目標を追加してみましょう。</div>';
+ $("goalList").innerHTML=db.goals.length?db.goals.map(g=>{const related=db.tasks.filter(t=>String(t.goalId)===String(g.id));return `<div class="step"><div class="between"><strong>${esc(g.name)}</strong><button class="btn small" onclick="toggleGoal('${esc(g.id)}')">${g.done?"達成済み ✓":"達成にする"}</button></div>${g.why?`<div class="small">${esc(g.why)}</div>`:""}<div class="small">関連タスク：${related.length}件</div>${related.map(t=>`<div class="small">・${esc(t.name)}${taskDone(t.id)?" ✓":""}</div>`).join("")}<button class="btn small danger" style="margin-top:7px" onclick="deleteGoal('${esc(g.id)}')">削除</button></div>`}).join(""):'<div class="empty">目標を追加してみましょう。</div>';
 }
 function toggleGoal(id){const g=db.goals.find(x=>String(x.id)===String(id));if(g)g.done=!g.done;save();render()}
-function deleteGoal(id){
- if(!confirm("この目標を削除しますか？"))return;
- db.goals=db.goals.filter(g=>String(g.id)!==String(id));save();render();
-}
-
-/* ルーティン編集 */
+function deleteGoal(id){if(!confirm("この目標を削除しますか？"))return;db.goals=db.goals.filter(g=>String(g.id)!==String(id));save();render()}
 let editingRoutineId=null;
 function addRoutineStepRow(step={}){
  const editor=$("routineStepEditor"),row=document.createElement("div");row.className="step-editor";
@@ -418,10 +364,7 @@ function addRoutineStepRow(step={}){
  row.append(name,mins,priority,remove);editor.appendChild(row);updateRoutineTotal();
 }
 function readRoutineEditor(){
- return [...document.querySelectorAll("#routineStepEditor .step-editor")].map(row=>{
-  const name=row.querySelector(".routine-step-name").value.trim(),raw=row.querySelector(".routine-step-mins").value;
-  return {id:row.dataset.id||uid(),name,mins:raw===""?null:Number(raw),priority:row.querySelector(".routine-step-priority").value};
- }).filter(s=>s.name);
+ return [...document.querySelectorAll("#routineStepEditor .step-editor")].map(row=>({id:row.dataset.id||uid(),name:row.querySelector(".routine-step-name").value.trim(),mins:row.querySelector(".routine-step-mins").value===""?null:Number(row.querySelector(".routine-step-mins").value),priority:row.querySelector(".routine-step-priority").value})).filter(s=>s.name);
 }
 function updateRoutineTotal(){
  const rows=[...document.querySelectorAll("#routineStepEditor .step-editor")];let total=0,missing=0;
@@ -430,92 +373,60 @@ function updateRoutineTotal(){
 }
 function createRoutine(){
  if(db.routines.length>=3)return toast("ルーティンは最大3つまでです");
- editingRoutineId=null;$("routineFormTitle").textContent="ルーティンを作る";
- $("routineName").value="";$("routineStepEditor").innerHTML="";addRoutineStepRow();
- $("routineName").scrollIntoView({behavior:"smooth",block:"center"});
+ editingRoutineId=null;$("routineFormTitle").textContent="ルーティンを作る";$("routineName").value="";$("routineStepEditor").innerHTML="";addRoutineStepRow();$("routineName").scrollIntoView({behavior:"smooth",block:"center"});
 }
 function editRoutine(id){
  const r=db.routines.find(x=>String(x.id)===String(id));if(!r)return;
- editingRoutineId=r.id;$("routineFormTitle").textContent="ルーティンを編集";
- $("routineName").value=r.name;$("routineStepEditor").innerHTML="";
+ editingRoutineId=r.id;$("routineFormTitle").textContent="ルーティンを編集";$("routineName").value=r.name;$("routineStepEditor").innerHTML="";
  r.steps.forEach(s=>{const n=$("routineStepEditor").children.length;addRoutineStepRow(s);$("routineStepEditor").children[n].dataset.id=s.id});
  $("routineName").scrollIntoView({behavior:"smooth",block:"center"});
 }
-function cancelRoutineEdit(){
- editingRoutineId=null;$("routineName").value="";$("routineStepEditor").innerHTML="";
- $("routineFormTitle").textContent="ルーティンを作る";updateRoutineTotal();
-}
+function cancelRoutineEdit(){editingRoutineId=null;$("routineName").value="";$("routineStepEditor").innerHTML="";$("routineFormTitle").textContent="ルーティンを作る";updateRoutineTotal()}
 function saveRoutine(){
  const name=$("routineName").value.trim(),steps=readRoutineEditor();
- if(!name)return toast("ルーティン名を入力してください");
- if(!steps.length)return toast("ステップを1つ以上追加してください");
+ if(!name)return toast("ルーティン名を入力してください");if(!steps.length)return toast("ステップを1つ以上追加してください");
  if(steps.some(s=>!Number.isFinite(s.mins)||s.mins<=0))return toast("各ステップの時間を1分以上で入力してください");
  const clean=steps.map(s=>({...s,mins:Math.round(s.mins)}));
- if(editingRoutineId){
-  const r=db.routines.find(x=>String(x.id)===String(editingRoutineId));if(!r)return toast("ルーティンが見つかりません");
-  r.name=name;r.steps=clean;toast("ルーティンを更新しました");
- }else{
-  if(db.routines.length>=3)return toast("ルーティンは最大3つまでです");
-  db.routines.push({id:uid(),name,steps:clean});toast("ルーティンを保存しました");
- }
+ if(editingRoutineId){const r=db.routines.find(x=>String(x.id)===String(editingRoutineId));if(!r)return toast("ルーティンが見つかりません");r.name=name;r.steps=clean;toast("ルーティンを更新しました")}
+ else{if(db.routines.length>=3)return toast("ルーティンは最大3つまでです");db.routines.push({id:uid(),name,steps:clean});toast("ルーティンを保存しました")}
  cancelRoutineEdit();save();render();
 }
 function routineTotal(r){return r.steps.reduce((sum,s)=>sum+(Number(s.mins)||0),0)}
 function renderRoutines(){
- $("routineList").innerHTML=db.routines.length?db.routines.map(r=>`
-  <div class="step"><div class="between"><strong>${esc(r.name)}</strong><span class="pill">${routineTotal(r)}分</span></div>
-   ${r.steps.map((s,i)=>`<div class="step"><div class="between"><span>${i+1}. ${esc(s.name)}</span><strong>${s.mins??"未設定"}分</strong></div><span class="pill ${s.priority}">${priorityLabels[s.priority]||"できればやる"}</span></div>`).join("")}
-   <div class="row wrap" style="margin-top:10px"><button class="btn primary small" onclick="startRoutine('${esc(r.id)}')">開始</button><button class="btn small" onclick="editRoutine('${esc(r.id)}')">編集</button><button class="btn small danger" onclick="deleteRoutine('${esc(r.id)}')">削除</button></div>
-  </div>`).join(""):'<div class="empty">ルーティンを作ってみましょう。</div>';
+ $("routineList").innerHTML=db.routines.length?db.routines.map(r=>`<div class="step"><div class="between"><strong>${esc(r.name)}</strong><span class="pill">${routineTotal(r)}分</span></div>${r.steps.map((s,i)=>`<div class="step"><div class="between"><span>${i+1}. ${esc(s.name)}</span><strong>${s.mins??"未設定"}分</strong></div><span class="pill ${s.priority}">${priorityLabels[s.priority]||"できればやる"}</span></div>`).join("")}<div class="row wrap" style="margin-top:10px"><button class="btn primary small" onclick="startRoutine('${esc(r.id)}')">開始</button><button class="btn small" onclick="editRoutine('${esc(r.id)}')">編集</button><button class="btn small danger" onclick="deleteRoutine('${esc(r.id)}')">削除</button></div></div>`).join(""):'<div class="empty">ルーティンを作ってみましょう。</div>';
  if(routineState)renderRunningSteps();
 }
-function deleteRoutine(id){
- if(!confirm("このルーティンを削除しますか？"))return;
- if(routineState&&String(routineState.id)===String(id))stopRoutine();
- db.routines=db.routines.filter(r=>String(r.id)!==String(id));save();render();
-}
+function deleteRoutine(id){if(!confirm("このルーティンを削除しますか？"))return;if(routineState&&String(routineState.id)===String(id))stopRoutine();db.routines=db.routines.filter(r=>String(r.id)!==String(id));save();render()}
 
-/* ルーティンのカウントダウン */
 let routineState=null,routineInterval=null;
 function startRoutine(id){
- const r=db.routines.find(x=>String(x.id)===String(id));
- if(!r||!r.steps.length)return;
+ const r=db.routines.find(x=>String(x.id)===String(id));if(!r||!r.steps.length)return;
  if(r.steps.some(x=>!Number(x.mins)||Number(x.mins)<=0))return toast("時間が未入力のステップがあります。編集してください。");
- stopRoutine();
- routineState={id:r.id,index:0,stepStarted:Date.now(),elapsedBeforeStep:0,paused:false,totalElapsed:0};
- $("routineRunner").classList.remove("hidden");showPage("routines");$("routineRunner").classList.remove("hidden");
- renderRunningSteps();startRoutineInterval();updateRoutineTimer();$("routineRunner").scrollIntoView({behavior:"smooth",block:"start"});
+ stopRoutine();routineState={id:r.id,index:0,stepStarted:Date.now(),elapsedBeforeStep:0,paused:false,totalElapsed:0};
+ $("routineRunner").classList.remove("hidden");showPage("routines");$("routineRunner").classList.remove("hidden");renderRunningSteps();startRoutineInterval();updateRoutineTimer();$("routineRunner").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function currentRoutine(){return routineState?db.routines.find(r=>String(r.id)===String(routineState.id)):null}
 function routineElapsed(){if(!routineState)return 0;return routineState.elapsedBeforeStep+(routineState.paused?0:Date.now()-routineState.stepStarted)}
 function renderRunningSteps(){
  if(!routineState)return;const r=currentRoutine();if(!r)return;const step=r.steps[routineState.index];if(!step)return;
- $("runningTitle").textContent=r.name;$("routineStepCount").textContent=(routineState.index+1)+"/"+r.steps.length;
- $("routineStepName").textContent=step.name;$("routinePlanned").textContent="設定時間 "+fmtTime(Number(step.mins)*60);
+ $("runningTitle").textContent=r.name;$("routineStepCount").textContent=(routineState.index+1)+"/"+r.steps.length;$("routineStepName").textContent=step.name;$("routinePlanned").textContent="設定時間 "+fmtTime(Number(step.mins)*60);
  $("routineProgress").style.width=(routineState.index/r.steps.length*100)+"%";$("routinePauseBtn").textContent=routineState.paused?"再開":"一時停止";
- $("runningSteps").innerHTML=r.steps.map((x,i)=>`<div class="step"><div class="between"><span>${i+1}. ${esc(x.name)}</span><span class="small">${x.mins}分</span></div><div class="small">${i===routineState.index?"実行中":i<routineState.index?"完了":"これから"}</div></div>`).join("");
- updateRoutineTimer();
+ $("runningSteps").innerHTML=r.steps.map((x,i)=>`<div class="step"><div class="between"><span>${i+1}. ${esc(x.name)}</span><span class="small">${x.mins}分</span></div><div class="small">${i===routineState.index?"実行中":i<routineState.index?"完了":"これから"}</div></div>`).join("");updateRoutineTimer();
 }
 function updateRoutineTimer(){
  if(!routineState)return;const r=currentRoutine();if(!r)return;const step=r.steps[routineState.index];if(!step)return;
  const elapsed=routineElapsed()/1000,planned=Number(step.mins)*60,remain=Math.ceil(planned-elapsed),over=remain<0;
- $("routineTimer").textContent=over?"+"+fmtTime(-remain):fmtTime(remain);
- $("routineTimer").classList.toggle("over",over);$("routineRing").classList.toggle("over",over);
+ $("routineTimer").textContent=over?"+"+fmtTime(-remain):fmtTime(remain);$("routineTimer").classList.toggle("over",over);$("routineRing").classList.toggle("over",over);
  $("routineRing").style.setProperty("--ring-progress",(Math.max(0,Math.min(1,(planned-elapsed)/planned))*100)+"%");
- $("routineStatus").textContent=over?"予定時間を超過":"残り時間";$("routineOver").textContent=over?"予定より "+fmtTime(-remain)+" 超過":"";
- $("routineElapsed").textContent="実際にかかった時間 "+fmtTime(Math.floor(elapsed));
+ $("routineStatus").textContent=over?"予定時間を超過":"残り時間";$("routineOver").textContent=over?"予定より "+fmtTime(-remain)+" 超過":"";$("routineElapsed").textContent="実際にかかった時間 "+fmtTime(Math.floor(elapsed));
 }
 function completeRoutineStep(){
- if(!routineState)return;const r=currentRoutine();if(!r)return;
- const sec=Math.floor(routineElapsed()/1000);routineState.totalElapsed+=sec;routineState.index++;
+ if(!routineState)return;const r=currentRoutine();if(!r)return;const sec=Math.floor(routineElapsed()/1000);routineState.totalElapsed+=sec;routineState.index++;
  if(routineState.index>=r.steps.length){logSeconds(routineState.totalElapsed,"ルーティン",r.name);stopRoutine();toast("ルーティン完了！おつかれさま ♡");render();return}
  routineState.elapsedBeforeStep=0;routineState.stepStarted=Date.now();routineState.paused=false;renderRunningSteps();updateRoutineTimer();
 }
 function pauseRoutine(){
- if(!routineState)return;
- if(!routineState.paused){routineState.elapsedBeforeStep=routineElapsed();routineState.paused=true}
- else{routineState.stepStarted=Date.now();routineState.paused=false}
- renderRunningSteps();
+ if(!routineState)return;if(!routineState.paused){routineState.elapsedBeforeStep=routineElapsed();routineState.paused=true}else{routineState.stepStarted=Date.now();routineState.paused=false}renderRunningSteps();
 }
 function startRoutineInterval(){clearInterval(routineInterval);routineInterval=setInterval(()=>{if(routineState)updateRoutineTimer()},250)}
 function stopRoutine(){clearInterval(routineInterval);routineInterval=null;routineState=null;$("routineRunner").classList.add("hidden")}
@@ -539,8 +450,7 @@ function renderPrepItems(){
 function updatePrepItem(i,k,v){if(!prepItems[i])return;prepItems[i][k]=k==="mins"?(v===""?null:Number(v)):v}
 function removePrepItem(i){prepItems.splice(i,1);renderPrepItems()}
 function getLeaveDate(){
- const v=$("leaveTime").value;if(!v)return null;const [h,m]=v.split(":").map(Number),now=new Date(),leave=new Date();
- leave.setHours(h,m,0,0);if(leave<=now)leave.setDate(leave.getDate()+1);return leave;
+ const v=$("leaveTime").value;if(!v)return null;const [h,m]=v.split(":").map(Number),now=new Date(),leave=new Date();leave.setHours(h,m,0,0);if(leave<=now)leave.setDate(leave.getDate()+1);return leave;
 }
 function planPrep(){
  const leave=getLeaveDate();if(!leave)return toast("出発時刻を入力してください");if(!prepItems.length)return toast("準備項目を追加してください");
@@ -554,45 +464,31 @@ function planPrep(){
  $("prepPlan").innerHTML=items.map((x,i)=>`<div class="prep-item"><label><input type="checkbox" ${x.include?"checked":""} onchange="togglePrepPlan(${i},this.checked)"><span class="grow"><strong>${esc(x.name)}</strong><div class="small">${x.mins}分 ・ ${priorityLabels[x.priority]}</div></span></label></div>`).join("");
  $("prepResult").classList.remove("hidden");updatePrepTotal();prepEnd=leave.getTime();
 }
-function togglePrepPlan(i,checked){
- if(!prepPlan[i])return;if(prepPlan[i].priority==="must"&&!checked&&!confirm("必須の項目です。本当に外しますか？")){planPrep();return}
- prepPlan[i].include=checked;updatePrepTotal();
-}
+function togglePrepPlan(i,checked){if(!prepPlan[i])return;if(prepPlan[i].priority==="must"&&!checked&&!confirm("必須の項目です。本当に外しますか？")){planPrep();return}prepPlan[i].include=checked;updatePrepTotal()}
 function updatePrepTotal(){
  const total=prepPlan.filter(x=>x.include).reduce((a,x)=>a+x.mins,0);$("prepTotal").textContent=total+"分";
- const leave=getLeaveDate(),available=leave?Math.max(0,Math.floor((leave-Date.now())/60000)):0;
- $("prepDifference").textContent=total>available?"予定時間を"+(total-available)+"分超えています。":(available-total)+"分の余裕があります。";
+ const leave=getLeaveDate(),available=leave?Math.max(0,Math.floor((leave-Date.now())/60000)):0;$("prepDifference").textContent=total>available?"予定時間を"+(total-available)+"分超えています。":(available-total)+"分の余裕があります。";
 }
 function acceptPrepPlan(){
- const selected=prepPlan.filter(x=>x.include);if(!selected.length)return toast("実行する項目を選んでください");
- const leave=getLeaveDate();if(!leave)return toast("出発時刻を確認してください");
- const available=Math.max(0,Math.floor((leave-Date.now())/60000)),total=selected.reduce((a,x)=>a+x.mins,0);
- if(total>available&&!confirm("選択した項目の合計時間が残り時間を超えています。それでも開始しますか？"))return;
+ const selected=prepPlan.filter(x=>x.include);if(!selected.length)return toast("実行する項目を選んでください");const leave=getLeaveDate();if(!leave)return toast("出発時刻を確認してください");
+ const available=Math.max(0,Math.floor((leave-Date.now())/60000)),total=selected.reduce((a,x)=>a+x.mins,0);if(total>available&&!confirm("選択した項目の合計時間が残り時間を超えています。それでも開始しますか？"))return;
  clearInterval(prepInterval);prepRun={items:selected.map(x=>({...x})),index:0,paused:false,elapsed:0,stepStarted:Date.now(),leaveAt:leave.getTime(),totalElapsed:0};
  $("prepRunnerCard").classList.remove("hidden");showPage("prep");$("prepRunnerCard").classList.remove("hidden");updatePrepRunner();startPrepInterval();$("prepRunnerCard").scrollIntoView({behavior:"smooth",block:"start"});toast("準備タイマーを開始しました");
 }
 function prepStepElapsed(){return prepRun?prepRun.elapsed+(prepRun.paused?0:Date.now()-prepRun.stepStarted):0}
 function updatePrepRunner(){
  if(!prepRun)return;const x=prepRun.items[prepRun.index];if(!x)return;
- $("prepStepCount").textContent=(prepRun.index+1)+"/"+prepRun.items.length;$("prepCurrentStep").textContent=x.name;
- $("prepPlanned").textContent="設定時間 "+fmtTime(Number(x.mins)*60);$("prepPauseBtn").textContent=prepRun.paused?"再開":"一時停止";
- $("prepProgress").style.width=(prepRun.index/prepRun.items.length*100)+"%";updatePrepTimer();
+ $("prepStepCount").textContent=(prepRun.index+1)+"/"+prepRun.items.length;$("prepCurrentStep").textContent=x.name;$("prepPlanned").textContent="設定時間 "+fmtTime(Number(x.mins)*60);$("prepPauseBtn").textContent=prepRun.paused?"再開":"一時停止";$("prepProgress").style.width=(prepRun.index/prepRun.items.length*100)+"%";updatePrepTimer();
 }
 function updatePrepTimer(){
- if(!prepRun)return;const x=prepRun.items[prepRun.index];if(!x)return;
- const elapsed=prepStepElapsed()/1000,planned=Number(x.mins)*60,remain=Math.ceil(planned-elapsed),over=remain<0;
- $("prepClock").textContent=over?"+"+fmtTime(-remain):fmtTime(remain);$("prepClock").classList.toggle("over",over);$("prepRing").classList.toggle("over",over);
- $("prepRing").style.setProperty("--ring-progress",(Math.max(0,Math.min(1,(planned-elapsed)/planned))*100)+"%");
- $("prepStatus").textContent=over?"予定時間を超過":"残り時間";$("prepOver").textContent=over?"予定より "+fmtTime(-remain)+" 超過":"";
- $("prepElapsed").textContent="実際にかかった時間 "+fmtTime(Math.floor(elapsed));
+ if(!prepRun)return;const x=prepRun.items[prepRun.index];if(!x)return;const elapsed=prepStepElapsed()/1000,planned=Number(x.mins)*60,remain=Math.ceil(planned-elapsed),over=remain<0;
+ $("prepClock").textContent=over?"+"+fmtTime(-remain):fmtTime(remain);$("prepClock").classList.toggle("over",over);$("prepRing").classList.toggle("over",over);$("prepRing").style.setProperty("--ring-progress",(Math.max(0,Math.min(1,(planned-elapsed)/planned))*100)+"%");
+ $("prepStatus").textContent=over?"予定時間を超過":"残り時間";$("prepOver").textContent=over?"予定より "+fmtTime(-remain)+" 超過":"";$("prepElapsed").textContent="実際にかかった時間 "+fmtTime(Math.floor(elapsed));
 }
 function startPrepInterval(){clearInterval(prepInterval);prepInterval=setInterval(()=>{if(prepRun)updatePrepTimer()},250)}
-function pausePrepClock(){
- if(!prepRun)return;if(!prepRun.paused){prepRun.elapsed=prepStepElapsed();prepRun.paused=true}else{prepRun.paused=false;prepRun.stepStarted=Date.now()}updatePrepRunner();
-}
+function pausePrepClock(){if(!prepRun)return;if(!prepRun.paused){prepRun.elapsed=prepStepElapsed();prepRun.paused=true}else{prepRun.paused=false;prepRun.stepStarted=Date.now()}updatePrepRunner()}
 function nextPrepStep(){
- if(!prepRun)return;const current=prepRun.items[prepRun.index],elapsed=Math.floor(prepStepElapsed()/1000);
- prepRun.totalElapsed+=elapsed;logSeconds(elapsed,"準備",current.name);prepRun.index++;
+ if(!prepRun)return;const current=prepRun.items[prepRun.index],elapsed=Math.floor(prepStepElapsed()/1000);prepRun.totalElapsed+=elapsed;logSeconds(elapsed,"準備",current.name);prepRun.index++;
  if(prepRun.index>=prepRun.items.length){clearInterval(prepInterval);prepInterval=null;prepRun=null;$("prepRunnerCard").classList.add("hidden");toast("準備完了！おつかれさま ♡");render();return}
  prepRun.elapsed=0;prepRun.paused=false;prepRun.stepStarted=Date.now();updatePrepRunner();startPrepInterval();
 }
@@ -606,14 +502,12 @@ let activeTask=null,taskInterval=null;
 function startTaskTimer(id){
  const t=db.tasks.find(x=>String(x.id)===String(id));if(!t)return;
  if(activeTask){if(!confirm("計測中のタイマーを切り替えますか？"))return;stopTaskTimer(false)}
- activeTask={id:t.id,name:t.name,cat:t.cat,started:Date.now()};
- $("activeTimerCard").classList.remove("hidden");$("activeTimerName").textContent=t.name;showPage("tasks");
+ activeTask={id:t.id,name:t.name,cat:t.cat,started:Date.now()};$("activeTimerCard").classList.remove("hidden");$("activeTimerName").textContent=t.name;showPage("tasks");
  clearInterval(taskInterval);taskInterval=setInterval(updateTaskClock,1000);updateTaskClock();
 }
 function updateTaskClock(){if(activeTask)$("activeTimerClock").textContent=fmtTime(Math.floor((Date.now()-activeTask.started)/1000))}
 function stopTaskTimer(shouldSave){
- clearInterval(taskInterval);taskInterval=null;
- if(activeTask&&shouldSave){logSeconds(Math.floor((Date.now()-activeTask.started)/1000),activeTask.cat,activeTask.name);toast("時間を記録しました")}
+ clearInterval(taskInterval);taskInterval=null;if(activeTask&&shouldSave){logSeconds(Math.floor((Date.now()-activeTask.started)/1000),activeTask.cat,activeTask.name);toast("時間を記録しました")}
  activeTask=null;$("activeTimerCard").classList.add("hidden");render();
 }
 
@@ -624,7 +518,6 @@ function startFocus(){
  focusInterval=setInterval(()=>{const rem=Math.max(0,Math.ceil((focusEnd-Date.now())/1000));$("focusClock").textContent=fmtTime(rem);if(rem<=0){clearInterval(focusInterval);focusInterval=null;logSeconds(300,"集中","5分集中");toast("5分間おつかれさま！");render()}},250);toast("5分集中スタート！");
 }
 function stopFocus(reset=true){clearInterval(focusInterval);focusInterval=null;if(reset)$("focusClock").textContent="05:00"}
-
 function logSeconds(sec,cat,name){
  if(sec<=0)return;if(!Array.isArray(db.records[dateKey()]))db.records[dateKey()]=[];
  db.records[dateKey()].push({sec:Math.max(0,Number(sec)||0),cat:cat||"その他",name:name||"",at:new Date().toISOString()});save();
@@ -637,66 +530,90 @@ let scanStream=null,scanLoop=null;
 function startStudyTimer(){
  if(studyTimer)return;
  studyStartedAt=Date.now();studyElapsedBefore=0;studyPaused=false;
- studyTimer={
-  subject:$("studySubject").value,
-  materialId:$("studyMaterial").value,
-  goalId:$("studyGoal").value,
-  taskId:$("studyTask").value
- };
+ studyTimer={subject:$("studySubject").value,materialId:$("studyMaterial").value,goalId:$("studyGoal").value,taskId:$("studyTask").value};
  $("studySubject").disabled=true;$("studyMaterial").disabled=true;$("studyGoal").disabled=true;$("studyTask").disabled=true;
  $("studyStartBtn").disabled=true;$("studyPauseBtn").disabled=false;$("studyFinishBtn").disabled=false;
- $("studyTimerStatus").textContent="計測中";
- studyInterval=setInterval(updateStudyClock,250);updateStudyClock();
+ $("studyTimerStatus").textContent="計測中";studyInterval=setInterval(updateStudyClock,250);updateStudyClock();
 }
-function studyElapsedMs(){
- return studyElapsedBefore+(studyPaused?0:Date.now()-studyStartedAt);
-}
+function studyElapsedMs(){return studyElapsedBefore+(studyPaused?0:Date.now()-studyStartedAt)}
 function updateStudyClock(){
- if(!studyTimer)return;
- const sec=Math.floor(studyElapsedMs()/1000);
- $("studyClock").textContent=fmtStudyTime(sec);
- $("studyRing").style.setProperty("--study-progress",(sec%3600/3600*360)+"deg");
- $("studyClockHint").textContent="勉強中";
+ if(!studyTimer)return;const sec=Math.floor(studyElapsedMs()/1000);
+ $("studyClock").textContent=fmtStudyTime(sec);$("studyRing").style.setProperty("--study-progress",(sec%3600/3600*360)+"deg");$("studyClockHint").textContent="勉強中";
 }
 function pauseStudyTimer(){
  if(!studyTimer)return;
- if(!studyPaused){
-  studyElapsedBefore=studyElapsedMs();studyPaused=true;
-  $("studyPauseBtn").textContent="再開";$("studyTimerStatus").textContent="一時停止中";
- }else{
-  studyStartedAt=Date.now();studyPaused=false;
-  $("studyPauseBtn").textContent="一時停止";$("studyTimerStatus").textContent="計測中";
- }
+ if(!studyPaused){studyElapsedBefore=studyElapsedMs();studyPaused=true;$("studyPauseBtn").textContent="再開";$("studyTimerStatus").textContent="一時停止中"}
+ else{studyStartedAt=Date.now();studyPaused=false;$("studyPauseBtn").textContent="一時停止";$("studyTimerStatus").textContent="計測中"}
  updateStudyClock();
 }
 function finishStudyTimer(){
- if(!studyTimer)return;
- const sec=Math.floor(studyElapsedMs()/1000);
+ if(!studyTimer)return;const sec=Math.floor(studyElapsedMs()/1000);
  clearInterval(studyInterval);studyInterval=null;
  if(sec>0){
-  db.studySessions.push({
-   id:uid(),date:dateKey(),subject:studyTimer.subject,
-   materialId:studyTimer.materialId||"",goalId:studyTimer.goalId||"",
-   taskId:studyTimer.taskId||"",sec,
-   startedAt:new Date(Date.now()-studyElapsedMs()).toISOString(),
-   endedAt:new Date().toISOString()
-  });
-  logSeconds(sec,"勉強",studyTimer.subject);
-  save();toast(minutesText(sec)+"を勉強記録に保存しました");
+  const ended=new Date(),started=new Date(ended.getTime()-studyElapsedMs());
+  db.studySessions.push({id:uid(),date:dateKey(ended),subject:studyTimer.subject,materialId:studyTimer.materialId||"",goalId:studyTimer.goalId||"",taskId:studyTimer.taskId||"",sec,startedAt:started.toISOString(),endedAt:ended.toISOString(),source:"timer"});
+  logSeconds(sec,"勉強",studyTimer.subject);save();toast(minutesText(sec)+"を勉強記録に保存しました");
  }else toast("1秒未満のため記録しませんでした");
+ resetStudyTimerUI();renderStudy();renderHome();renderReview();
+}
+function resetStudyTimerUI(){
  studyTimer=null;studyElapsedBefore=0;studyPaused=false;
  $("studySubject").disabled=false;$("studyMaterial").disabled=false;$("studyGoal").disabled=false;$("studyTask").disabled=false;
  $("studyStartBtn").disabled=false;$("studyPauseBtn").disabled=true;$("studyFinishBtn").disabled=true;
- $("studyPauseBtn").textContent="一時停止";$("studyTimerStatus").textContent="待機中";
- $("studyClock").textContent="00:00:00";$("studyClockHint").textContent="今日の積み重ね";
- $("studyRing").style.setProperty("--study-progress","0deg");
- renderStudy();renderHome();renderReview();
+ $("studyPauseBtn").textContent="一時停止";$("studyTimerStatus").textContent="待機中";$("studyClock").textContent="00:00:00";$("studyClockHint").textContent="今日の積み重ね";$("studyRing").style.setProperty("--study-progress","0deg");
 }
+
+/* 手動で勉強記録を追加 */
+function addManualStudyRecord(){
+ const date=$("manualStudyDate").value;
+ const subject=$("manualStudySubject").value;
+ const hours=Number($("manualStudyHours").value);
+ const minutes=Number($("manualStudyMinutes").value);
+ const materialId=$("manualStudyMaterial").value;
+ const goalId=$("manualStudyGoal").value;
+ const taskId=$("manualStudyTask").value;
+
+ if(!date)return toast("勉強した日付を選択してください");
+ if(!Number.isInteger(hours)||hours<0||hours>24)return toast("時間は0〜24の整数で入力してください");
+ if(!Number.isInteger(minutes)||minutes<0||minutes>59)return toast("分は0〜59の整数で入力してください");
+
+ const sec=(hours*60+minutes)*60;
+ if(sec<=0)return toast("勉強時間を入力してください");
+ if(sec>24*60*60)return toast("1日24時間以内で入力してください");
+
+ const selectedDate=new Date(date+"T00:00:00");
+ if(Number.isNaN(selectedDate.getTime()))return toast("日付を確認してください");
+
+ const session={
+  id:uid(),date,subject,materialId:materialId||"",goalId:goalId||"",taskId:taskId||"",
+  sec,startedAt:new Date(selectedDate.getTime()).toISOString(),
+  endedAt:new Date(selectedDate.getTime()+sec*1000).toISOString(),
+  source:"manual"
+ };
+
+ db.studySessions.push(session);
+
+ // ホームの記録時間にも反映
+ if(!Array.isArray(db.records[date]))db.records[date]=[];
+ db.records[date].push({sec,cat:"勉強",name:subject,at:new Date().toISOString(),source:"manual-study",studySessionId:session.id});
+
+ save();
+
+ // 入力欄を初期化
+ $("manualStudyHours").value="0";
+ $("manualStudyMinutes").value="30";
+ $("manualStudyDate").value=dateKey();
+
+ // 追加した日付のカレンダーを表示
+ studyMonth=new Date(selectedDate.getFullYear(),selectedDate.getMonth(),1);
+ studySelectedDate=date;
+ renderStudy();renderHome();renderReview();
+
+ toast(date+"の勉強記録を追加しました ♡");
+}
+
 function sessionsForMonth(y,m){
- return db.studySessions.filter(s=>{
-  const d=new Date(s.date+"T00:00:00");
-  return d.getFullYear()===y&&d.getMonth()===m;
- });
+ return db.studySessions.filter(s=>{const d=new Date(s.date+"T00:00:00");return d.getFullYear()===y&&d.getMonth()===m});
 }
 function totalStudySeconds(sessions){return sessions.reduce((a,s)=>a+Math.max(0,Number(s.sec)||0),0)}
 function renderStudy(){
@@ -709,37 +626,42 @@ function renderStudy(){
  if(db.goals.some(g=>g.id===oldGoal))goals.value=oldGoal;
  if(db.tasks.some(t=>t.id===oldTask))tasks.value=oldTask;
  if(db.materials.some(m=>m.id===oldMaterial))materials.value=oldMaterial;
- const now=new Date(),weekStart=new Date(now);weekStart.setDate(now.getDate()-((now.getDay()+6)%7));weekStart.setHours(0,0,0,0);
- const week=db.studySessions.filter(s=>new Date(s.date+"T00:00:00")>=weekStart);
+
+ // 手動入力フォームの選択肢
+ const manualMaterial=$("manualStudyMaterial"),manualGoal=$("manualStudyGoal"),manualTask=$("manualStudyTask");
+ const oldMM=manualMaterial.value,oldMG=manualGoal.value,oldMT=manualTask.value;
+ manualMaterial.innerHTML='<option value="">選択なし</option>'+db.materials.map(m=>`<option value="${esc(m.id)}">${esc(m.title)}</option>`).join("");
+ manualGoal.innerHTML='<option value="">選択なし</option>'+db.goals.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join("");
+ manualTask.innerHTML='<option value="">選択なし</option>'+db.tasks.map(t=>`<option value="${esc(t.id)}">${esc(t.name)}</option>`).join("");
+ if(db.materials.some(m=>m.id===oldMM))manualMaterial.value=oldMM;
+ if(db.goals.some(g=>g.id===oldMG))manualGoal.value=oldMG;
+ if(db.tasks.some(t=>t.id===oldMT))manualTask.value=oldMT;
+
+ if(!$("manualStudyDate").value)$("manualStudyDate").value=dateKey();
+
+ const now=new Date(),weekStart=new Date(now);
+ weekStart.setDate(now.getDate()-((now.getDay()+6)%7));weekStart.setHours(0,0,0,0);
+ const week=db.studySessions.filter(s=>new Date(s.date+"T00:00:00")>=weekStart&&new Date(s.date+"T00:00:00")<=now);
  const month=sessionsForMonth(now.getFullYear(),now.getMonth());
  $("studyWeekTotal").textContent=minutesText(totalStudySeconds(week));
  $("studyMonthTotal").textContent=minutesText(totalStudySeconds(month));
  renderStudySubjects(month);renderStudyCalendar();renderMaterials();renderShareCard();
 }
 function renderStudySubjects(sessions){
- const totals={};
- sessions.forEach(s=>totals[s.subject]=(totals[s.subject]||0)+Number(s.sec||0));
+ const totals={};sessions.forEach(s=>totals[s.subject]=(totals[s.subject]||0)+Number(s.sec||0));
  const list=Object.entries(totals).sort((a,b)=>b[1]-a[1]);
  if(!list.length){$("studySubjectStats").innerHTML='<div class="empty">まだ今月の勉強記録がありません。</div>';return}
  const max=Math.max(...list.map(x=>x[1]),1);
- $("studySubjectStats").innerHTML=list.map(([name,sec])=>`
-  <div class="study-bar-row"><span>${esc(name)}</span><div class="study-bar"><span style="width:${sec/max*100}%"></span></div><strong>${minutesText(sec)}</strong></div>
- `).join("");
+ $("studySubjectStats").innerHTML=list.map(([name,sec])=>`<div class="study-bar-row"><span>${esc(name)}</span><div class="study-bar"><span style="width:${sec/max*100}%"></span></div><strong>${minutesText(sec)}</strong></div>`).join("");
 }
-function changeStudyMonth(delta){
- studyMonth=new Date(studyMonth.getFullYear(),studyMonth.getMonth()+delta,1);renderStudyCalendar();
-}
+function changeStudyMonth(delta){studyMonth=new Date(studyMonth.getFullYear(),studyMonth.getMonth()+delta,1);renderStudyCalendar()}
 function renderStudyCalendar(){
- const y=studyMonth.getFullYear(),m=studyMonth.getMonth();
+ const y=studyMonth.getFullYear(),m=studyMonth.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0);
  $("studyMonthLabel").textContent=y+"年"+(m+1)+"月";
- const first=new Date(y,m,1),last=new Date(y,m+1,0);
- const dayNames=["月","火","水","木","金","土","日"];
- let html=dayNames.map(d=>`<div class="calendar-head">${d}</div>`).join("");
- const offset=(first.getDay()+6)%7;
- for(let i=0;i<offset;i++)html+='<div></div>';
+ const dayNames=["月","火","水","木","金","土","日"];let html=dayNames.map(d=>`<div class="calendar-head">${d}</div>`).join("");
+ const offset=(first.getDay()+6)%7;for(let i=0;i<offset;i++)html+="<div></div>";
  for(let day=1;day<=last.getDate();day++){
-  const d=new Date(y,m,day),key=dateKey(d);
-  const sessions=db.studySessions.filter(s=>s.date===key),sec=totalStudySeconds(sessions);
+  const d=new Date(y,m,day),key=dateKey(d),sessions=db.studySessions.filter(s=>s.date===key),sec=totalStudySeconds(sessions);
   const cls=["calendar-day",key===dateKey()?"today":"",key===studySelectedDate?"selected":""].filter(Boolean).join(" ");
   html+=`<button class="${cls}" onclick="selectStudyDate('${key}')"><strong>${day}</strong><span>${sec?minutesText(sec):""}</span>${sec?'<i class="dot"></i>':""}</button>`;
  }
@@ -752,35 +674,33 @@ function renderStudyDay(){
  if(!list.length){$("studyDaySessions").innerHTML='<div class="empty">この日の勉強記録はありません。</div>';return}
  $("studyDaySessions").innerHTML=list.map(s=>{
   const material=db.materials.find(m=>m.id===s.materialId);
-  return `<div class="history-entry"><div class="between"><strong>${esc(s.subject)}</strong><strong>${minutesText(s.sec)}</strong></div>${material?`<div class="small">${esc(material.title)}</div>`:""}<div class="small">${new Date(s.startedAt).toLocaleTimeString("ja-JP",{hour:"2-digit",minute:"2-digit"})} 開始</div><button class="btn small danger" onclick="deleteStudySession('${esc(s.id)}')">記録を削除</button></div>`;
+  const source=s.source==="manual"?"手動入力":"タイマー";
+  return `<div class="history-entry"><div class="between"><strong>${esc(s.subject)}</strong><strong>${minutesText(s.sec)}</strong></div><div class="small">${source}</div>${material?`<div class="small">${esc(material.title)}</div>`:""}<button class="btn small danger" onclick="deleteStudySession('${esc(s.id)}')">記録を削除</button></div>`;
  }).join("");
 }
 function deleteStudySession(id){
  if(!confirm("この勉強記録を削除しますか？"))return;
- db.studySessions=db.studySessions.filter(s=>s.id!==id);save();renderStudy();
+ const target=db.studySessions.find(s=>s.id===id);
+ db.studySessions=db.studySessions.filter(s=>s.id!==id);
+ // ホームの記録時間からも該当する手動記録を削除
+ if(target&&target.source==="manual"){
+  const records=db.records[target.date]||[];
+  db.records[target.date]=records.filter(r=>r.studySessionId!==id);
+ }
+ save();renderStudy();renderHome();
 }
-function toggleMaterialForm(){
- $("materialForm").classList.toggle("hidden");
-}
+function toggleMaterialForm(){$("materialForm").classList.toggle("hidden")}
 function validISBN(v){
  const s=String(v||"").replace(/[-\s]/g,"");
- if(/^\d{13}$/.test(s)){
-  let sum=0;for(let i=0;i<12;i++)sum+=Number(s[i])*(i%2?3:1);
-  return (10-sum%10)%10===Number(s[12]);
- }
- if(/^\d{9}[\dX]$/.test(s)){
-  let sum=0;for(let i=0;i<10;i++)sum+=(s[i]==="X"?10:Number(s[i]))*(10-i);
-  return sum%11===0;
- }
+ if(/^\d{13}$/.test(s)){let sum=0;for(let i=0;i<12;i++)sum+=Number(s[i])*(i%2?3:1);return (10-sum%10)%10===Number(s[12])}
+ if(/^\d{9}[\dX]$/.test(s)){let sum=0;for(let i=0;i<10;i++)sum+=(s[i]==="X"?10:Number(s[i]))*(10-i);return sum%11===0}
  return false;
 }
 function addStudyMaterial(){
  const title=$("materialTitle").value.trim(),isbn=$("materialISBN").value.trim().replace(/[-\s]/g,"");
- if(!title)return toast("教材名を入力してください");
- if(isbn&&!validISBN(isbn))return toast("ISBNの形式を確認してください");
+ if(!title)return toast("教材名を入力してください");if(isbn&&!validISBN(isbn))return toast("ISBNの形式を確認してください");
  db.materials.push({id:uid(),title,isbn,subject:$("materialSubject").value,createdAt:new Date().toISOString()});
- $("materialTitle").value="";$("materialISBN").value="";
- $("materialForm").classList.add("hidden");stopISBNScan();save();renderStudy();toast("教材を登録しました");
+ $("materialTitle").value="";$("materialISBN").value="";$("materialForm").classList.add("hidden");stopISBNScan();save();renderStudy();toast("教材を登録しました");
 }
 function renderMaterials(){
  const el=$("materialList");if(!db.materials.length){el.innerHTML='<div class="empty">教材はまだ登録されていません。</div>';return}
@@ -791,18 +711,14 @@ function deleteMaterial(id){
  db.materials=db.materials.filter(m=>m.id!==id);save();renderStudy();
 }
 async function startISBNScan(){
- const video=$("scanVideo"),area=$("scanArea"),message=$("scanMessage");
- area.classList.remove("hidden");
+ const video=$("scanVideo"),area=$("scanArea"),message=$("scanMessage");area.classList.remove("hidden");
  if(!("BarcodeDetector" in window)){message.textContent="このブラウザではバーコード読み取りに対応していません。ISBNを手入力してください。";return}
  try{
-  const detector=new BarcodeDetector({formats:["ean_13"]});
-  scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
+  const detector=new BarcodeDetector({formats:["ean_13"]});scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
   video.srcObject=scanStream;message.textContent="本のバーコードをカメラに映してください。";
   const scan=async()=>{
    if(!scanStream)return;
-   try{
-    const codes=await detector.detect(video);
-    const code=codes.find(c=>String(c.rawValue).startsWith("978")||String(c.rawValue).startsWith("979"));
+   try{const codes=await detector.detect(video);const code=codes.find(c=>String(c.rawValue).startsWith("978")||String(c.rawValue).startsWith("979"));
     if(code){$("materialISBN").value=code.rawValue;message.textContent="読み取りました。教材名と科目を入力して保存してください。";stopISBNScan();return}
    }catch(e){}
    scanLoop=requestAnimationFrame(scan);
@@ -817,48 +733,34 @@ function stopISBNScan(){
 }
 function renderShareCard(){
  const theme=$("shareTheme").value;
- const colors={
-  beige:{bg:"#f1e9df",ink:"#51463f",accent:"#b8a5c9"},
-  lavender:{bg:"#eee5f8",ink:"#453c50",accent:"#a88bc8"},
-  mono:{bg:"#eeeeee",ink:"#333333",accent:"#888888"}
- };
- const c=colors[theme]||colors.beige,card=$("studyShareCard");
- card.style.background=c.bg;card.style.color=c.ink;
+ const colors={beige:{bg:"#f1e9df",ink:"#51463f"},lavender:{bg:"#eee5f8",ink:"#453c50"},mono:{bg:"#eeeeee",ink:"#333333"}};
+ const c=colors[theme]||colors.beige,card=$("studyShareCard");card.style.background=c.bg;card.style.color=c.ink;
  $("shareDate").textContent=new Date().toLocaleDateString("ja-JP",{year:"numeric",month:"long",day:"numeric"});
- const sec=totalStudySeconds(db.studySessions.filter(s=>s.date===dateKey()));
- $("shareTime").textContent=minutesText(sec);
- $("shareCommentPreview").textContent=$("shareComment").value.trim();
+ const sec=totalStudySeconds(db.studySessions.filter(s=>s.date===dateKey()));$("shareTime").textContent=minutesText(sec);$("shareCommentPreview").textContent=$("shareComment").value.trim();
 }
 async function saveStudyShareCard(){
- renderShareCard();
- const card=$("studyShareCard");
- const rect=card.getBoundingClientRect(),scale=3;
+ renderShareCard();const card=$("studyShareCard"),rect=card.getBoundingClientRect(),scale=3;
  const canvas=document.createElement("canvas");canvas.width=rect.width*scale;canvas.height=rect.height*scale;
  const ctx=canvas.getContext("2d");ctx.scale(scale,scale);
  const style=getComputedStyle(card),cx=rect.width/2,cy=rect.height/2,r=Math.min(rect.width,rect.height)/2-4;
  ctx.fillStyle=style.backgroundColor;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
  ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue("--paper");ctx.lineWidth=8;ctx.stroke();
- const ink=style.color;ctx.fillStyle=ink;ctx.textAlign="center";ctx.textBaseline="middle";
+ ctx.fillStyle=style.color;ctx.textAlign="center";ctx.textBaseline="middle";
  ctx.font="11px sans-serif";ctx.fillText("MY STUDY LOG",cx,cy-65);
  ctx.font="13px sans-serif";ctx.fillText($("shareDate").textContent,cx,cy-35);
  ctx.font="bold 42px sans-serif";ctx.fillText($("shareTime").textContent,cx,cy+5);
  ctx.font="11px sans-serif";ctx.fillText("A LITTLE PROGRESS EVERY DAY",cx,cy+43);
- const comment=$("shareComment").value.trim();
- if(comment){ctx.font="13px sans-serif";ctx.fillText(comment.slice(0,40),cx,cy+72)}
+ const comment=$("shareComment").value.trim();if(comment){ctx.font="13px sans-serif";ctx.fillText(comment.slice(0,40),cx,cy+72)}
  canvas.toBlob(blob=>{
   if(!blob)return toast("画像を作成できませんでした");
-  const url=URL.createObjectURL(blob),a=document.createElement("a");
-  a.href=url;a.download="FLOW-study-"+dateKey()+".png";a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1500);toast("共有カードを保存しました");
+  const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="FLOW-study-"+dateKey()+".png";a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);toast("共有カードを保存しました");
  },"image/png");
 }
 $("shareComment")?.addEventListener("input",()=>{if($("page-study").classList.contains("active"))renderShareCard()});
 
 /* 振り返り */
 function loadTodayReflection(){
- const r=db.reflection[dateKey()]||{};
- $("reflectionWin").value=r.win||"";$("reflectionBlock").value=r.block||"";$("reflectionNext").value=r.next||"";
- $("reflectionSaved").textContent=r.saved?"今日の振り返りは保存済み ♡":"";
+ const r=db.reflection[dateKey()]||{};$("reflectionWin").value=r.win||"";$("reflectionBlock").value=r.block||"";$("reflectionNext").value=r.next||"";$("reflectionSaved").textContent=r.saved?"今日の振り返りは保存済み ♡":"";
 }
 function saveReflection(){
  db.reflection[dateKey()]={win:$("reflectionWin").value,block:$("reflectionBlock").value,next:$("reflectionNext").value,saved:true,updatedAt:new Date().toISOString()};
@@ -866,35 +768,26 @@ function saveReflection(){
 }
 let historyOpen=false;
 function toggleReflectionHistory(){
- historyOpen=!historyOpen;$("reflectionHistory").classList.toggle("hidden",!historyOpen);
- $("historyToggle").textContent=historyOpen?"履歴を閉じる":"履歴を見る";
- if(historyOpen)renderReflectionHistory();
+ historyOpen=!historyOpen;$("reflectionHistory").classList.toggle("hidden",!historyOpen);$("historyToggle").textContent=historyOpen?"履歴を閉じる":"履歴を見る";if(historyOpen)renderReflectionHistory();
 }
 function renderReflectionHistory(){
- const el=$("reflectionHistory");
- const entries=Object.entries(db.reflection||{}).filter(([k,r])=>k!==dateKey()&&r&&r.saved).sort((a,b)=>b[0].localeCompare(a[0]));
+ const el=$("reflectionHistory"),entries=Object.entries(db.reflection||{}).filter(([k,r])=>k!==dateKey()&&r&&r.saved).sort((a,b)=>b[0].localeCompare(a[0]));
  if(!entries.length){el.innerHTML='<div class="empty">まだ過去の振り返りはありません。</div>';return}
  el.innerHTML=entries.map(([k,r])=>`<details class="history-entry"><summary>${esc(k)}</summary><label>できたこと</label><textarea id="hist-win-${esc(k)}">${esc(r.win||"")}</textarea><label>困ったこと</label><textarea id="hist-block-${esc(k)}">${esc(r.block||"")}</textarea><label>明日やりたいこと</label><textarea id="hist-next-${esc(k)}">${esc(r.next||"")}</textarea><button class="btn primary small" onclick="updateOldReflection('${esc(k)}')">この記録を更新</button></details>`).join("");
 }
 function updateOldReflection(k){
- const r=db.reflection[k];if(!r)return;
- const a=$("hist-win-"+k),b=$("hist-block-"+k),c=$("hist-next-"+k);if(!a||!b||!c)return;
- db.reflection[k]={...r,win:a.value,block:b.value,next:c.value,updatedAt:new Date().toISOString()};
- save();toast("過去の記録を更新しました");
+ const r=db.reflection[k];if(!r)return;const a=$("hist-win-"+k),b=$("hist-block-"+k),c=$("hist-next-"+k);if(!a||!b||!c)return;
+ db.reflection[k]={...r,win:a.value,block:b.value,next:c.value,updatedAt:new Date().toISOString()};save();toast("過去の記録を更新しました");
 }
 function renderReview(){
- $("reviewDone").textContent=todayTasks().filter(t=>t.done).length;
- $("reviewTime").textContent=minutesText(todaySeconds());
- if(historyOpen)renderReflectionHistory();
+ $("reviewDone").textContent=todayTasks().filter(t=>t.done).length;$("reviewTime").textContent=minutesText(todaySeconds());if(historyOpen)renderReflectionHistory();
 }
 
 /* 設定・バックアップ */
 function changeTheme(theme){db.theme=theme;save();applyTheme();toast("テーマを変更しました")}
 function exportData(){
- save();const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
- const url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="FLOW-backup-"+dateKey()+".json";document.body.appendChild(a);a.click();a.remove();
- setTimeout(()=>URL.revokeObjectURL(url),1000);toast("バックアップを作成しました");
+ save();const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="FLOW-backup-"+dateKey()+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast("バックアップを作成しました");
 }
 function importData(){
  const file=$("importFile").files[0];if(!file)return toast("バックアップファイルを選んでください");
@@ -902,10 +795,8 @@ function importData(){
  const reader=new FileReader();
  reader.onload=()=>{
   try{
-   const parsed=JSON.parse(reader.result);
-   if(!parsed||typeof parsed!=="object"||Array.isArray(parsed))throw Error("invalid");
-   db=normalize(parsed);save();historyOpen=false;$("reflectionHistory").classList.add("hidden");
-   cancelRoutineEdit();render();loadTodayReflection();toast("バックアップを復元しました");
+   const parsed=JSON.parse(reader.result);if(!parsed||typeof parsed!=="object"||Array.isArray(parsed))throw Error("invalid");
+   db=normalize(parsed);save();historyOpen=false;$("reflectionHistory").classList.add("hidden");cancelRoutineEdit();render();loadTodayReflection();toast("バックアップを復元しました");
   }catch(e){toast("ファイルを読み込めませんでした。FLOWのバックアップか確認してください")}
  };
  reader.onerror=()=>toast("ファイルを読み込めませんでした");reader.readAsText(file);
@@ -915,8 +806,7 @@ function resetApp(){
  if(!confirm("タスク・目標・記録・振り返りを含めて初期化します。続けますか？"))return;
  stopTaskTimer(false);stopRoutine();stopFocus(false);stopPrepClock();stopISBNScan();
  if(studyTimer){clearInterval(studyInterval);studyTimer=null}
- db=fresh();save();historyOpen=false;$("reflectionHistory").classList.add("hidden");
- prepItems=[];renderPrepItems();cancelRoutineEdit();render();loadTodayReflection();showPage("home");toast("初期化しました");
+ db=fresh();save();historyOpen=false;$("reflectionHistory").classList.add("hidden");prepItems=[];renderPrepItems();cancelRoutineEdit();render();loadTodayReflection();showPage("home");toast("初期化しました");
 }
 
 /* 起動 */
